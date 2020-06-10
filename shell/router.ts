@@ -5,7 +5,7 @@ import { readFileList } from "./util";
 var filesList: string[] = [];
 readFileList('./src/pages', filesList);
 console.log(filesList);
-
+console.log(process.env.mode)
 let str = `
 import React from "react";
 import ReactDOM from 'react-dom';
@@ -14,6 +14,14 @@ import {
     Switch,
     Route
 } from "react-router-dom";
+
+`
+if (process.env.mode == 'development') {
+    str += `
+import 'react-hot-loader/patch';
+`
+}
+str += `
 import Layout from "@/layouts";
 import '@/global'
 import '@/global.less'
@@ -51,7 +59,7 @@ str += `
         </Layout>
     );
 }
-ReactDOM.render(<AppRouter />, document.getElementById('root'))
+export default AppRouter;
 `
 
 try {
@@ -60,3 +68,20 @@ try {
 
 }
 fs.writeFileSync(path.join(__dirname, '..', 'src', 'app.tsx'), str)
+if (process.env.mode == 'production') {
+    fs.writeFileSync(path.join(__dirname, '..', 'src', 'index.tsx'), `
+    import React from 'react';
+    import ReactDOM from 'react-dom';
+    import AppRouter from './app';
+    ReactDOM.render(<AppRouter />, document.getElementById('root'))
+    `)
+} else {
+    fs.writeFileSync(path.join(__dirname, '..', 'src', 'index.tsx'), `
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { hot } from 'react-hot-loader/root';
+import AppRouter from './app';
+const HotApp = hot(AppRouter);
+ReactDOM.render(<HotApp />, document.getElementById('root'))
+`)
+}

@@ -6,6 +6,8 @@ import {
     Switch,
     Route
 } from "react-router-dom";
+
+
 import Layout from "@/layouts";
 import '@/global'
 import '@/global.less'
@@ -38,4 +40,4 @@ const AppRouter: React.FC = () => {
         </Layout>
     );
 }
-ReactDOM.render(<AppRouter />, document.getElementById('root'))
+export default AppRouter;

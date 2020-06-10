@@ -4,30 +4,10 @@ import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import merge from "webpack-merge";
 import common from "./webpack.common";
 import AssetsPlugin from 'assets-webpack-plugin'
+import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 const config: webpack.Configuration = merge(common, {
     mode: "production",
     devtool: "source-map",
-    //     optimization: {
-    //         splitChunks: {
-    //             chunks: "all",     
-    // // 
-    //             minSize: 100000, 
-    //             maxSize: 300000,
-    //             minChunks:1,
-    //             cacheGroups: {
-    //                 react: {
-    //                     test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-    //                     name: "react",
-    //                     chunks: "all",
-    //                 },
-    //                 antd: {
-    //                     test: /[\\/]node_modules[\\/]antd|\@ant(.+?)[\\/]/,
-    //                     name: "antd",
-    //                     chunks: "all",
-    //                 },
-    //             },
-    //         },
-    //     },
     externals: {
         'react': 'React',
         'react-dom': 'ReactDOM',
@@ -43,6 +23,7 @@ const config: webpack.Configuration = merge(common, {
     plugins: [
         new BundleAnalyzerPlugin(),
         new AssetsPlugin({ filename: 'assets.json', path: path.join(__dirname, '..', 'dist') }),
+        new CleanWebpackPlugin()
     ],
 });
 
